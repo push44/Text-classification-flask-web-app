@@ -1,3 +1,4 @@
+![Alt text](stackoverflow.png?raw=true "logo")
 
 ## Project Requiremnet
 
@@ -6,6 +7,9 @@ In this project we tried to solve a such problem using the data set provided by 
 
 ## Web app preview
 ![Alt text](app.png?raw=true "Title")
+
+### Please visit the app by clicking on the link below
+[Stackoverflow text classification app](https://text-label-prediction.herokuapp.com/)
 
 ## File directory
 ```bash
