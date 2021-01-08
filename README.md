@@ -95,14 +95,6 @@ Hence, this is a *text multi-class classification* problem.
   <li><b>predict.py</b>: This file is used to make final prediction.</li>
 </ol>
 
-## Model performance:
-![Alt text](confusion_matrix.png?raw=true "Confusion Matrix")
-
-Mean Train accuracy: 0.37<br>
-Mean Validation accuracy: 0.31<br>
-
-We can certainly see that model performance is not best. There is huge room for improvement.
-
 ## Flask app:
 Once the model is built we can create our intended Flask web app that will clasify given question into one of the three categories. This is done through the <b>app.py</b> file.
 
