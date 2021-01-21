@@ -2,8 +2,10 @@ from flask import Flask, render_template, request
 import joblib
 
 import sys
+
 sys.path.insert(1, "./src/")
-from test_text_features import clean_tags, clean_body_text, clean_title_text
+from dataframe import clean_tags, clean_body, code_indicator
+# from test_text_features import clean_tags, clean_body_text, clean_title_text
 
 from scipy import sparse
 
@@ -22,19 +24,21 @@ def predict():
     title, body, tags = [x for x in request.form.values()]
 
     tags = clean_tags(tags)
-    body_text, code_indicator, reference_link_indicator, image_indicator = clean_body_text(body)
-    title_text = clean_title_text(title)
+    indicator = code_indicator(body)
+    body = clean_body(body)
 
     predictor = []
-    features = dict(zip("tags code_indicator reference_link_indicator image_indicator title_text".split(),
-                    [tags, code_indicator, reference_link_indicator, image_indicator, title_text]))
-    for feat in features.keys():
-        try:
-            vec = joblib.load(f"./models/tfidf/{feat}_tfidf.pkl")
-            predictor.append(vec.transform([features[feat]]))
 
-        except:
-            predictor.append(int(features[feat]))
+    title_vec = joblib.load("./models/tfidf/Title_tfidf.pkl")
+    predictor.append(title_vec.transform([title]))
+
+    body_vec = joblib.load("./models/tfidf/Body_tfidf.pkl")
+    predictor.append(body_vec.transform([body]))
+
+    tags_vec = joblib.load("./models/tfidf/Tags_tfidf.pkl")
+    predictor.append(tags_vec.transform([tags]))
+
+    predictor.append([indicator])
 
     X = sparse.hstack(predictor).tocsr()
 

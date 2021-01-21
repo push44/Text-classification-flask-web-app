@@ -18,9 +18,9 @@ In this project we tried to solve a such problem using the data set provided by 
 ├── input
 │   ├── archive
 │   │   ├── train.csv
-│   │   └── valid.csv
+│   │   └── test.csv
 │   ├── train.csv
-│   └── valid.csv
+│   └── test.csv
 ├── models
 │   ├── LogisticRegression.pkl
 │   └── tfidf
