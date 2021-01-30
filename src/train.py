@@ -113,7 +113,7 @@ def create_model(length, vocab_size):
     # compile
     model.compile(loss='CategoricalCrossentropy', optimizer='adam', metrics=['accuracy'])
 
-    # keras.utils.plot_model(model, show_shapes=True)
+    keras.utils.plot_model(model, show_shapes=True, to_file="../cnn.png")
     return model
 
 
@@ -192,7 +192,6 @@ def model_validate(df, max_len):
 
 
 if __name__ == "__main__":
-
     # read train data
     train_data = pd.read_csv("../input/train_dev.csv")
 

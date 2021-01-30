@@ -216,7 +216,7 @@ def update_dataframe(df):
 
 if __name__ == "__main__":
     train_df = pd.read_csv("../input/train.csv")
-    test_df = pd.read_csv("../input/valid.csv")
+    test_df = pd.read_csv("../input/test.csv")
 
     train_df = update_dataframe(train_df)
     test_df = update_dataframe(test_df)
