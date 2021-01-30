@@ -8,7 +8,7 @@ def create_folds(df):
     :return: Dataframe with added column indicating fold
     """
     df["kfold"] = -1
-    df = df.sample(frac=1).reset_index(drop=True)
+    df = df.sample(frac=1, random_state=44).reset_index(drop=True)
     y = df.Y.values
 
     kf = model_selection.StratifiedKFold(n_splits=5)
@@ -19,6 +19,6 @@ def create_folds(df):
 
 
 if __name__ == "__main__":
-    train = pd.read_csv("../input/train.csv")
+    train = pd.read_csv("../input/archive/train.csv")
     train = create_folds(train)
     train.to_csv("../input/train.csv", index=False)

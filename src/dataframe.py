@@ -1,54 +1,23 @@
 import pandas as pd
 from bs4 import BeautifulSoup
-from tqdm import tqdm
 import nltk
+
 nltk.download("wordnet")
 
 
-def body_text_indicator_features(df):
-    """
-    :param df: Take dataframe as input
-    :return: Extracted features in list formats
-    """
-    # Create a list to indicate if code snippet is present in the body
-    code_indicator = []
-    reference_link_indicator = []
-    image_indicator = []
-
-    for ind in tqdm(range(df.shape[0])):
-
-        # Create a BeautifulSoup object
-        q_body = df['Body'].values[ind].lower()
-        soup = BeautifulSoup(q_body)
-
-        # To check if body contains code snippet
-        if len(soup.findAll('code')) > 0:
-            code_indicator.append(1)
-            # Find all code tags and replace them with empty string ''
-            for code_text in soup.findAll('code'):
-                code_text.replace_with('')
-        else:
-            code_indicator.append(0)
-
-        # To check if body contains reference link tag
-        if len(soup.findAll('a')) > 0:
-            reference_link_indicator.append(1)
-        else:
-            reference_link_indicator.append(0)
-
-        # To check if body contains image
-        if len(soup.findAll('img')) > 0:
-            image_indicator.append(1)
-        else:
-            image_indicator.append(0)
-
-    return [code_indicator, reference_link_indicator, image_indicator]
-
-
 def code_indicator(sentence):
-    soup = BeautifulSoup(sentence.lower())
+    soup = BeautifulSoup(sentence.lower(), "lxml")
     # To check if body contains code snippet
     if len(soup.findAll('code')) > 0:
+        return 1
+    else:
+        return 0
+
+
+def script_indicator(sentence):
+    soup = BeautifulSoup(sentence.lower(), "lxml")
+    # To check if body contains code snippet
+    if len(soup.findAll('script')) > 0:
         return 1
     else:
         return 0
@@ -198,12 +167,13 @@ def decontraction(sentence):
 
 def clean_body(sentence):
     # Create Soup object
-    soup = BeautifulSoup(sentence)
+    soup = BeautifulSoup(sentence, "lxml")
     # Find only p tags
     soup_content = [line.text for line in soup.findAll("p")]
 
     # Create string from list of strings and remove extra spaces
-    string_sentences = " ".join(soup_content).replace("  ", " ").strip().lower()
+    string_sentences = " ".join(soup_content)
+    string_sentences = string_sentences.replace("  ", " ").strip().lower()
 
     if len(string_sentences) > 0:
         pass
@@ -216,7 +186,7 @@ def clean_body(sentence):
 
 
 def code_len(sentence):
-    soup = BeautifulSoup(sentence)
+    soup = BeautifulSoup(sentence, "lxml")
     soup_content = [line.text for line in soup.findAll("code")]
     string = " ".join(soup_content).strip()
     return len(string)
@@ -232,6 +202,8 @@ def update_dataframe(df):
     # Extract indicator features from body text
     # code_indicator, reference_link_indicator, image_indicator = body_text_indicator_features(df)
     df["code_indicator"] = df["Body"].apply(code_indicator)
+
+    df["script_indicator"] = df["Body"].apply(script_indicator)
 
     # Create clean body text
     df["clean_body_text"] = df["Body"].apply(clean_body)
